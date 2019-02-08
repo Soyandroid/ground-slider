@@ -20,9 +20,9 @@ void gsreporter_update(uint32_t modified) {
 		return;
 	}
 
-	uint32_t mask = 0x000f0000;
-	for (int i = 0; i < 16; i ++) {
-		mask >>= 4;
+	uint32_t mask = 0x00000400;
+	for (int i = 0; i < 4; i ++) {
+		mask >>= 1;
 		if (modified & mask) {
 			if (sensors & mask) {
 				NKROKeyboard.add(OSU_KEYS[i]);

@@ -29,7 +29,7 @@
 #define cap1188_set_asc(dev, avg, samptime, cyctime) ((dev).writeRegister(CAP1188_ASC, ((avg)&(samptime)&(cyctime))))
 #define cap1188_set_sensitivity(dev, sensitivity) ((dev).writeRegister(CAP1188_SENSCTRL, ((sensitivity)<<4) & 0xf))
 #define cap1188_get_delta(dev, sensor) ((dev).readRegister(CAP1188_INPUTDC | (sensor)))
-#define cap1188_set_threshold(dev, sensor, thres) ((dev).readRegister(CAP1188_INPUTTH | (sensor), thres))
+#define cap1188_set_threshold(dev, sensor, thres) ((dev).writeRegister(CAP1188_INPUTTH | (sensor), thres))
 #define cap1188_calibrate(dev, sensormap) ((dev).writeRegister(CAP1188_CALIBRATE, (sensormap)))
 
 #endif

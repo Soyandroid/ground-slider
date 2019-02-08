@@ -19,10 +19,15 @@ void gssensor_init() {
 	capl.begin();
 	capr.begin();
 
-	cap1188_set_asc(capl, CAP1188_ASC_AVG_4, CAP1188_ASC_SAMPTIME_640, CAP1188_ASC_CYCTIME_35);
-	cap1188_set_sensitivity(capl, 7);
-	cap1188_set_asc(capr, CAP1188_ASC_AVG_4, CAP1188_ASC_SAMPTIME_640, CAP1188_ASC_CYCTIME_35);
-	cap1188_set_sensitivity(capr, 7);
+	cap1188_set_asc(capl, CAP1188_ASC_AVG_2, CAP1188_ASC_SAMPTIME_1280, CAP1188_ASC_CYCTIME_35);
+	cap1188_set_sensitivity(capl, 0);
+	cap1188_set_asc(capr, CAP1188_ASC_AVG_2, CAP1188_ASC_SAMPTIME_1280, CAP1188_ASC_CYCTIME_35);
+	cap1188_set_sensitivity(capr, 0);
+	for (int i = 0; i < 8; i++) {
+		cap1188_set_threshold(capl, i, 125);
+		cap1188_set_threshold(capr, i, 125);
+	}
+	// Serial.begin(9600);
 }
 
 void gssensor_tasklet() {
@@ -42,5 +47,12 @@ void gssensor_tasklet() {
 		mask <<= 1;
 	}
 
+	/*
+	for (int i = 0; i < 8; i++) {
+		Serial.print((int8_t) cap1188_get_delta(capl, i));
+		Serial.print("\t");
+	}
+	Serial.println();
+	*/
 	gsreporter_update(sensors ^ sensors_prev);
 }
