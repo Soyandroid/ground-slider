@@ -22,6 +22,6 @@
 #define CR_PIN_RST	-1
 
 /// LED wiring
-#define LED_PIN 6
+#define LED_PIN 8
 
 #endif

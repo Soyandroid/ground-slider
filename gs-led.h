@@ -4,7 +4,7 @@
 #define FASTLED_INTERNAL
 #include <FastLED.h>
 
-#define LED_COUNT 30
+#define LED_COUNT 16
 
 extern CRGB led[LED_COUNT];
 

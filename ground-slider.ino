@@ -11,8 +11,8 @@
 #include "gs-reporter.h"
 
 void setup() {
+	gsled_init();
 	gssensor_init();
-	// gsled_init();
 	gsreporter_init();
 }
 
