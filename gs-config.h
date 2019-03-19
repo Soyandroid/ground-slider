@@ -12,10 +12,9 @@
 
 #define IR_PIN_START	A1
 #define IR_PIN_END		A5
-#define IR_ACTIVATION	200
+#define IR_ACTIVATION	90
 
 /// CAP sensor wiring
-
 #define CL_PIN_CS	10
 #define CL_PIN_RST	12
 #define CR_PIN_CS	11
@@ -23,5 +22,8 @@
 
 /// LED wiring
 #define LED_PIN 8
+
+/// Calibrate Button
+#define CALIBRATE_PIN 7
 
 #endif

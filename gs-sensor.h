@@ -12,4 +12,7 @@ extern uint32_t sensors;
 void gssensor_init();
 void gssensor_tasklet();
 
+void auto_calibrate();
+void ir_calibrate();
+
 #endif
