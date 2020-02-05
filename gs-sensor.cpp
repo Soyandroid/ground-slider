@@ -1,22 +1,31 @@
 #include "gs-sensor.h"
 
 #include <Arduino.h>
-#include <Adafruit_CAP1188.h>
 
 #include "gs-config.h"
-#include "cap1188-helper.h"
 #include "gs-reporter.h"
 #include "gs-led.h"
 
 uint32_t sensors;
 int16_t ir_activation[6];
 
+#ifdef KB_MODE_CAP1188
+#include <Adafruit_CAP1188.h>
+#include "cap1188-helper.h"
 Adafruit_CAP1188 capl = Adafruit_CAP1188(CL_PIN_CS, CL_PIN_RST);
 Adafruit_CAP1188 capr = Adafruit_CAP1188(CR_PIN_CS, CR_PIN_RST);
+#endif
+
+#ifdef KB_MODE_MPR121
+#include "Adafruit_MPR121.h" // TODO switch to library
+Adafruit_MPR121 capl = Adafruit_MPR121();
+Adafruit_MPR121 capr = Adafruit_MPR121();
+#endif
 
 void gssensor_init() {
 	sensors = 0;
 
+#ifdef KB_MODE_CAP1188
 	capl.begin();
 	capr.begin();
 
@@ -32,6 +41,12 @@ void gssensor_init() {
 		cap1188_set_threshold(capl, i, 72);
 		cap1188_set_threshold(capr, i, 72);
 	}
+#endif
+
+#ifdef KB_MODE_MPR121
+	capl.begin(CL_ADDR);
+	capr.begin(CR_ADDR);
+#endif
 
 	pinMode(CALIBRATE_PIN, INPUT_PULLUP);
 
@@ -52,8 +67,8 @@ void gssensor_tasklet() {
 	sensors = 0;
 
 	// Read capacitive sensors
-	sensors |= ((uint32_t)capl.touched()) << 8;
-	sensors |= (uint32_t)capr.touched();
+	sensors |= ((uint32_t)(uint8_t)capl.touched()) << 8;
+	sensors |= (uint32_t)(uint8_t)capr.touched();
 
 	// Read IR LEDs
 	for (int i = 0; i < 6; i++) {
@@ -87,8 +102,15 @@ void auto_calibrate() {
 		led[i] = 0xff0000;
 	gsled_commit();
 	delay(3000);
+
+#ifdef KB_MODE_CAP1188
 	cap1188_calibrate(capl, 0xff);
 	cap1188_calibrate(capr, 0xff);
+#endif
+
+#ifdef KB_MODE_MPR121
+	// TODO calibrate MPR121
+#endif
 
 	// Serial.print("IR act: ");
 	for (int i = 0; i < 6; i++) {

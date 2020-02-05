@@ -10,7 +10,13 @@
 #include "gs-sensor.h"
 #include "gs-led.h"
 
+#ifdef KB_MODE_CAP1188
 const char SEGATOOLS_KEYS[] = "987654azsxdcfvgbhnjmk,";
+#endif
+#ifdef KB_MODE_MPR121
+const char SEGATOOLS_KEYS[] = "987654vfcdxsza,kmjnhbg";
+#endif
+
 #define SEGATOOLS_KEYCOLOR_ON	0xff00ff
 #define SEGATOOLS_KEYCOLOR_OFF	0xffff33
 

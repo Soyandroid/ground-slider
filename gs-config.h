@@ -17,11 +17,17 @@
 #define IR_MODE_ACTIVEHIGH
 // #define IR_MODE_ACTIVELOW
 
-/// CAP sensor wiring
+/// CAP1188 sensor wiring
+// #define KB_MODE_CAP1188
 #define CL_PIN_CS	10
 #define CL_PIN_RST	12
 #define CR_PIN_CS	11
 #define CR_PIN_RST	-1
+
+/// MPR121 sensor wiring
+#define KB_MODE_MPR121
+#define CL_ADDR 0x5b
+#define CR_ADDR 0x5a
 
 /// LED wiring
 #define LED_PIN 8
