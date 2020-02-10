@@ -17,9 +17,9 @@ Adafruit_CAP1188 capr = Adafruit_CAP1188(CR_PIN_CS, CR_PIN_RST);
 #endif
 
 #ifdef KB_MODE_MPR121
-#include "Adafruit_MPR121.h" // TODO switch to library
-Adafruit_MPR121 capl = Adafruit_MPR121();
-Adafruit_MPR121 capr = Adafruit_MPR121();
+#include "mpr121-helper.h"
+MPR121 capl;
+MPR121 capr;
 #endif
 
 void gssensor_init() {
@@ -45,7 +45,11 @@ void gssensor_init() {
 
 #ifdef KB_MODE_MPR121
 	capl.begin(CL_ADDR);
+	capl.init();
+	capl.run();
 	capr.begin(CR_ADDR);
+	capr.init();
+	capr.run();
 #endif
 
 	pinMode(CALIBRATE_PIN, INPUT_PULLUP);
@@ -87,13 +91,6 @@ void gssensor_tasklet() {
 #endif
 	}
 
-	/*
-	for (int i = 0; i < 8; i++) {
-		Serial.print((int8_t) cap1188_get_delta(capl, i));
-		Serial.print("\t");
-	}
-	Serial.println();
-	*/
 	gsreporter_update(sensors ^ sensors_prev);
 }
 
@@ -101,7 +98,7 @@ void auto_calibrate() {
 	for (int i = 0; i <16; i++)
 		led[i] = 0xff0000;
 	gsled_commit();
-	delay(3000);
+	delay(2000);
 
 #ifdef KB_MODE_CAP1188
 	cap1188_calibrate(capl, 0xff);
@@ -109,7 +106,10 @@ void auto_calibrate() {
 #endif
 
 #ifdef KB_MODE_MPR121
-	// TODO calibrate MPR121
+	capl.stop();
+	capr.stop();
+	capl.run();
+	capr.run();
 #endif
 
 	// Serial.print("IR act: ");
@@ -128,6 +128,7 @@ void auto_calibrate() {
 		led[i] = 0x00ff00;
 	gsled_commit();
 	delay(500);
+	gsled_init();
 }
 
 void ir_calibrate() {
@@ -139,7 +140,7 @@ void ir_calibrate() {
 
 	gsled_commit();
 
-	while (!(capr.touched() & 1)) {
+	while (!(capr.touched() & 0x81)) {
 		for (i = 0; i < 6; i++) {
 			int32_t pinval = analogRead(IR_PIN_START + i);
 			if (pinval > ir_activation[i]) {
