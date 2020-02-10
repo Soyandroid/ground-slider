@@ -5,7 +5,7 @@
 
 // Thresholds
 #define MPR121CONF_TTH	32	///< Electrode touch threshold
-#define MPR121CONF_RTH	24	///< Electrode release threshold
+#define MPR121CONF_RTH	32	///< Electrode release threshold
 // De-bounce counts
 #define MPR121CONF_DR	4	///< Debounce number for release
 #define MPR121CONF_DT	0	///< Debounce number for touch

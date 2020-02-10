@@ -13,7 +13,7 @@ void gsled_init() {
 	}
 	FastLED.addLeds<NEOPIXEL, LED_PIN>(led, LED_COUNT);
 #ifdef LED_SERIAL_ENABLE
-	Serial.begin(9600);
+	Serial.begin(115200);
 	Serial.setTimeout(0);
 	serial_prevdelay = serial_delay = 1200;
 	serial_timer = millis();
