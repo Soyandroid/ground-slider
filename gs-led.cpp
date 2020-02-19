@@ -41,8 +41,19 @@ void led_com_tasklet() {
 		}
 	}
 	if (--serial_delay == 0) {
-		while(Serial.read() != -1);
-		Serial.write('A');
+		if (Serial.available()) {
+			// Incomplete pixel NACK
+			while(Serial.read() != -1);
+			serial_count = 0;
+			Serial.write('N');
+		} else if (serial_count != 0) {
+			// Incomplete packet NACK
+			serial_count = 0;
+			Serial.write('N');
+		} else {
+			// Idle ACK
+			Serial.write('A');
+		}
 		int interval = millis() - serial_timer;
 		if (interval > 500) {
 			serial_prevdelay = serial_prevdelay * 0.9;
